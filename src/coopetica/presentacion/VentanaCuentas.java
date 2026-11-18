@@ -1,5 +1,6 @@
 package coopetica.presentacion;
 
+import coopetica.logica.AsociadoServicio;
 import coopetica.logica.CuentaServicio;
 import coopetica.modelo.Cuenta;
 import java.awt.*;
@@ -21,7 +22,7 @@ public class VentanaCuentas extends JFrame {
 
     public VentanaCuentas() throws IOException {
         super("CoopeTica - Cuentas");
-        servicio = new CuentaServicio();
+        servicio = new CuentaServicio(new AsociadoServicio());
 
         JPanel form = new JPanel(new GridLayout(0, 2, 5, 5));
         form.add(new JLabel("Tipo de cuenta:"));     form.add(cmbTipo);
@@ -76,7 +77,7 @@ public class VentanaCuentas extends JFrame {
         btnListar.addActionListener(e -> listar());
         btnReporte.addActionListener(e -> reporte());
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
         listar();

@@ -11,8 +11,17 @@ public class CuentaServicio {
 
     private CuentaArchivoDAO dao;
 
+    // Si es null, no se valida que el asociado exista
+    private AsociadoServicio asociados;
+
     public CuentaServicio() throws IOException {
         this.dao = new CuentaArchivoDAO();
+    }
+
+    // Version que valida la cedula contra los asociados registrados
+    public CuentaServicio(AsociadoServicio asociados) throws IOException {
+        this();
+        this.asociados = asociados;
     }
 
     public ArrayList<Cuenta> listar() throws IOException {
@@ -29,8 +38,13 @@ public class CuentaServicio {
     public String abrir(String tipo, String numero, String cedula,
                         String montoTexto, String extraTexto)
                         throws IOException {
+        numero = numero.trim();
+        cedula = cedula.trim();
         if (numero.isEmpty() || cedula.isEmpty()) {
             return "El numero de cuenta y la cedula son obligatorios.";
+        }
+        if (asociados != null && asociados.buscarPorCedula(cedula) == null) {
+            return "No existe un asociado con esa cedula.";
         }
         double monto, extra;
         try {
