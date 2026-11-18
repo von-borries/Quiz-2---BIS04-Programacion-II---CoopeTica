@@ -1,0 +1,12 @@
+# Salida de compilacion
+out/
+bin/
+build/
+dist/
+*.class
+
+# Archivos de IDE locales
+nbproject/private/
+.idea/
+*.iml
+.vscode/
