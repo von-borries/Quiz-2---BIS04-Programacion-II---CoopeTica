@@ -75,12 +75,46 @@ public class CuentaServicio {
         return "No existe esa cuenta.";
     }
 
+    public String depositar(String numero, String montoTexto)
+                           throws IOException {
+        double monto;
+        try {
+            monto = Double.parseDouble(montoTexto);
+        } catch (NumberFormatException e) {
+            return "El monto debe ser un numero.";
+        }
+        if (monto <= 0) { return "El monto debe ser mayor que cero."; }
+        ArrayList<Cuenta> cuentas = dao.listar();
+        for (Cuenta c : cuentas) {
+            if (c.getNumero().equals(numero)) {
+                c.depositar(monto);
+                dao.guardarTodas(cuentas);
+                return "OK";
+            }
+        }
+        return "No existe esa cuenta.";
+    }
+
     public double totalDepositado() throws IOException {
         double total = 0;
         for (Cuenta c : dao.listar()) {
             total = total + c.getSaldo();
         }
         return total;
+    }
+
+    // Devuelve {total en cuentas de ahorro, total en cuentas corrientes}
+    public double[] totalesPorTipo() throws IOException {
+        double ahorro = 0;
+        double corriente = 0;
+        for (Cuenta c : dao.listar()) {
+            if (c instanceof CuentaAhorro) {
+                ahorro = ahorro + c.getSaldo();
+            } else {
+                corriente = corriente + c.getSaldo();
+            }
+        }
+        return new double[] { ahorro, corriente };
     }
 
     public ArrayList<Cuenta> listarPorAsociado(String cedula)
